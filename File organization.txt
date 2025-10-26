@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TABLE_SIZE 10
+
+// Structure to hold file metadata
+typedef struct FileMeta {
+    char name[50];
+    char type[10];
+    int size;
+    char path[100];
+    struct FileMeta *next;
+} FileMeta;
+
+FileMeta* hashTable[TABLE_SIZE];
+
+// Hash function based on file name
+int hashFunction(char *name) {
+    int sum = 0;
+    for (int i = 0; name[i] != '\0'; i++)
+        sum += name[i];
+    return sum % TABLE_SIZE;
+}
+
+// Insert a new file record
+void insertFile() {
+    FileMeta *newFile = (FileMeta*)malloc(sizeof(FileMeta));
+    
+    printf("Enter file name: ");
+    scanf("%s", newFile->name);
+    printf("Enter file type: ");
+    scanf("%s", newFile->type);
+    printf("Enter file size (KB): ");
+    scanf("%d", &newFile->size);
+    printf("Enter file path: ");
+    scanf("%s", newFile->path);
+    
+    newFile->next = NULL;
+    int index = hashFunction(newFile->name);
+    
+    if (hashTable[index] == NULL) {
+        hashTable[index] = newFile;
+    } else {
+        FileMeta *temp = hashTable[index];
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = newFile;
+    }
+    
+    printf("✅ File record inserted successfully at index %d!\n", index);
+}
+
+// Search a file by name
+void searchFile() {
+    char name[50];
+    printf("Enter file name to search: ");
+    scanf("%s", name);
+    
+    int index = hashFunction(name);
+    FileMeta *temp = hashTable[index];
+    while (temp != NULL) {
+        if (strcmp(temp->name, name) == 0) {
+            printf("\n📄 File Found!\n");
+            printf("Name: %s\nType: %s\nSize: %d KB\nPath: %s\n", temp->name, temp->type, temp->size, temp->path);
+            return;
+        }
+        temp = temp->next;
+    }
+    printf("❌ File not found in the system.\n");
+}
+
+// Delete a file record
+void deleteFile() {
+    char name[50];
+    printf("Enter file name to delete: ");
+    scanf("%s", name);
+    
+    int index = hashFunction(name);
+    FileMeta *temp = hashTable[index], *prev = NULL;
+    
+    while (temp != NULL) {
+        if (strcmp(temp->name, name) == 0) {
+            if (prev == NULL)
+                hashTable[index] = temp->next;
+            else
+                prev->next = temp->next;
+            
+            free(temp);
+            printf("🗑️ File deleted successfully!\n");
+            return;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    printf("❌ File not found.\n");
+}
+
+// Display all file records
+void displayFiles() {
+    printf("\n==== FILE ORGANIZATION TABLE ====\n");
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        printf("\nIndex %d: ", i);
+        if (hashTable[i] == NULL) {
+            printf("Empty");
+        } else {
+            FileMeta *temp = hashTable[i];
+            while (temp != NULL) {
+                printf("\n  ➤ Name: %s | Type: %s | Size: %d KB | Path: %s",
+                       temp->name, temp->type, temp->size, temp->path);
+                temp = temp->next;
+            }
+        }
+    }
+    printf("\n=================================\n");
+}
+
+int main() {
+    int choice;
+    
+    printf("=== FILE ORGANIZATION SIMULATOR USING HASHING ===\n");
+    printf("Aligned with SDG 9: Industry, Innovation & Infrastructure\n");
+    
+    do {
+        printf("\n1. Insert File Metadata");
+        printf("\n2. Search File");
+        printf("\n3. Delete File");
+        printf("\n4. Display All Files");
+        printf("\n5. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+        
+        switch(choice) {
+            case 1: insertFile(); break;
+            case 2: searchFile(); break;
+            case 3: deleteFile(); break;
+            case 4: displayFiles(); break;
+            case 5: printf("Exiting... 🌐 Strengthening Digital Infrastructure!\n"); break;
+            default: printf("Invalid choice! Try again.\n");
+        }
+    } while(choice != 5);
+    
+    return 0;
+}
