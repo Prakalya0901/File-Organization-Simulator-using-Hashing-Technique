@@ -1,7 +1,11 @@
 📁 File Organization Simulator using Hashing Technique
 🔗 Aligned with SDG 9 – Industry, Innovation and Infrastructure
+
+
 👩‍💻 Developed By
+
 Prakalya.SA , Oviya.S
+
 Bachelor of Engineering – Computer Science and Engineering
 Anna University
 
@@ -40,22 +44,6 @@ Hash Table → for efficient indexing and access
 
 Linked List → for collision handling (chaining)
 
-💻 How to Run
-
-Clone or download the repository:
-
-git clone https://github.com/your-username/file-organization-simulator.git
-cd file-organization-simulator
-
-
-Compile the program:
-
-gcc file_organization_simulator.c -o file_organization
-
-
-Run the executable:
-
-./file_organization
 
 📂 Sample Metadata Fields
 Field	Description
